@@ -7,9 +7,9 @@ import classifier2
 from matplotlib import pyplot as plt
 
 N = 1000 #calibration
-M = 1000 #test
-n = 2000
-alpha = 0.1
+M = 2000 #test
+n = 3000
+alpha = 0.05
 
 badmodel = classifier1.Net()
 badmodel.load_state_dict(torch.load("models/mnist_bad.pth"))
@@ -52,17 +52,29 @@ q_hat = np.quantile(ncscores, quantile, method="higher")
 prediction_sets = test_scores >= (1 - q_hat)
 empirical_coverage = prediction_sets[np.arange(prediction_sets.shape[0]), test_labels].mean()
 
-print(empirical_coverage)
+print(empirical_coverage) #0.9465
 
 
-with torch.no_grad(): 
-    logits = badmodel(calibration_images[np.argmax(ncscores)])
-    print(torch.softmax(logits, dim=1))
+worst = np.argmin(test_scores[np.arange(M), test_labels])
+print(worst)
 
-plt.imshow(calibration_images[np.argmax(ncscores)][0], cmap="gray") #the worst image in calibration
+fig, (ax_img, ax_bar) = plt.subplots(1, 2, figsize=(10, 5))
+
+ax_img.imshow(test_images[worst].reshape((28, 28)), cmap="gray")
+ax_img.axis("off")
+
+prediction_set_numbers = np.where(prediction_sets[worst])[0]
+print(prediction_set_numbers)
+print(test_labels[worst])
+print(test_scores[worst])
+
+ax_img.set_title(f"Coverage: {empirical_coverage:.4f}\nPrediction set: {prediction_set_numbers.tolist()}")
+
+set_sizes = prediction_sets.sum(axis=1)
+sizes, counts = np.unique(set_sizes, return_counts=True)
+print(sizes, counts)
+
+ax_bar.bar(sizes, counts, width=0.5, color='crimson', ec='black')
+
+plt.savefig('graphs/conformal_simple_badmodel.png')
 plt.show()
-
-
-
-
-
