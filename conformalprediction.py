@@ -11,9 +11,9 @@ M = 2000 #test
 n = 3000
 alpha = 0.05
 
-badmodel = classifier1.Net()
-badmodel.load_state_dict(torch.load("models/mnist_bad.pth"))
-badmodel.eval()
+model = classifier1.Net()
+model.load_state_dict(torch.load("models/mnist_bad.pth"))
+model.eval()
 
 data = MNIST(
     root="data",
@@ -28,7 +28,7 @@ images = torch.stack([data[i][0] for i in range(n)])
 labels = data.targets.numpy()[:n]
 
 with torch.no_grad():
-    logits = badmodel(images)
+    logits = model(images)
     scores = torch.softmax(logits, dim=1).numpy()
 
 
@@ -52,7 +52,7 @@ q_hat = np.quantile(ncscores, quantile, method="higher")
 prediction_sets = test_scores >= (1 - q_hat)
 empirical_coverage = prediction_sets[np.arange(prediction_sets.shape[0]), test_labels].mean()
 
-print(empirical_coverage) #0.9465
+print(empirical_coverage) #0.9465 
 
 
 worst = np.argmin(test_scores[np.arange(M), test_labels])
