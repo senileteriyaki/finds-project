@@ -6,15 +6,19 @@ import classifier1
 import classifier2
 from matplotlib import pyplot as plt
 
-
+def ncscore(scores, labels):
+    correctscores = scores[np.arange(len(labels)), labels].reshape(-1, 1)
+    include = scores >= correctscores
+    return np.sum(scores*include, axis=1)
+    pass
 
 N = 1000 #calibration
 M = 2000 #test
 n = 3000
 alpha = 0.05
 
-model = classifier1.Net()
-model.load_state_dict(torch.load("models/mnist_bad.pth"))
+model = classifier2.Net()
+model.load_state_dict(torch.load("models/mnist_good.pth"))
 model.eval()
 
 data = MNIST(
@@ -47,11 +51,20 @@ test_scores = scores[~idx]
 test_images = images[~idx]
 test_labels = labels[~idx]
 
-ncscores = 1 - calibration_scores[np.arange(N), calibration_labels]
-quantile = np.ceil((N + 1) * (1 - alpha)) / N
-q_hat = np.quantile(ncscores, quantile, method="higher")
 
-prediction_sets = test_scores >= (1 - q_hat)
+ncscores = ncscore(calibration_scores, calibration_labels)
+
+quantile = np.ceil((N + 1) * (1 - alpha)) / N
+
+
+q_hat = np.quantile(ncscores, quantile, method="higher")
+test_order = np.flip(np.argsort(test_scores, axis=1), axis=1)
+test_partialsums = np.cumsum(np.flip(np.sort(test_scores, axis=1), axis=1), axis=1)
+prediction_sets = np.take_along_axis(test_partialsums <= q_hat,
+                                     test_order.argsort(axis=1),
+                                     axis=1)
+
+
 empirical_coverage = prediction_sets[np.arange(prediction_sets.shape[0]), test_labels].mean()
 
 print(empirical_coverage) #0.9465 
@@ -72,11 +85,14 @@ print(test_scores[worst])
 
 ax_img.set_title(f"Coverage: {empirical_coverage:.4f}\nPrediction set: {prediction_set_numbers.tolist()}")
 
+
+
+
 set_sizes = prediction_sets.sum(axis=1)
 sizes, counts = np.unique(set_sizes, return_counts=True)
 print(sizes, counts)
 
 ax_bar.bar(sizes, counts, width=0.5, color='crimson', ec='black')
 
-plt.savefig('graphs/conformal_simple_badmodel.png')
+plt.savefig('graphs/conformal_adaptive_goodmodel.png')
 plt.show()
