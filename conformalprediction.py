@@ -13,8 +13,8 @@ M = 2000 #test
 n = 3000
 alpha = 0.05
 
-model = classifier2.Net()
-model.load_state_dict(torch.load("models/mnist_good.pth"))
+model = classifier1.Net()
+model.load_state_dict(torch.load("models/mnist_bad.pth"))
 model.eval()
 
 data = MNIST(
