@@ -13,8 +13,8 @@ M = 2000 #test
 n = 3000
 alpha = 0.05
 
-model = classifier1.Net()
-model.load_state_dict(torch.load("models/mnist_bad.pth"))
+model = classifier2.Net()
+model.load_state_dict(torch.load("models/mnist_good.pth"))
 model.eval()
 
 data = MNIST(
@@ -70,11 +70,12 @@ print(prediction_set_numbers)
 print(test_labels[worst])
 print(test_scores[worst])
 
-ax_img.set_title(f"Coverage: {empirical_coverage:.4f}\nPrediction set: {prediction_set_numbers.tolist()}")
 
 set_sizes = prediction_sets.sum(axis=1)
 sizes, counts = np.unique(set_sizes, return_counts=True)
+meansize = set_sizes.mean()
 print(sizes, counts)
+ax_img.set_title(f"Coverage: {empirical_coverage:.4f}\nMean set size: {meansize:.2f}\n Prediction set: {prediction_set_numbers.tolist()}")
 
 ax_bar.bar(sizes, counts, width=0.5, color='crimson', ec='black')
 
