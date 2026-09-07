@@ -6,19 +6,25 @@ import classifier1
 import classifier2
 from matplotlib import pyplot as plt
 
-def ncscore(scores, labels):
-    correctscores = scores[np.arange(len(labels)), labels].reshape(-1, 1)
-    include = scores >= correctscores
-    return np.sum(scores*include, axis=1)
-    pass
+def ncscore(scores, labels, k, lam):
+    reg = np.array(k*[0,] + (scores.shape[1] - k)*[lam,])[np.newaxis,:] #regularization vector
+    order = np.flip(scores.argsort(axis=1), axis=1) 
+    sortedscores = np.sort(scores, axis=1, descending=True)
+    regscores = sortedscores + reg 
+    labelpos = np.where(order == labels[:, np.newaxis])[1] #position of label
+    return regscores.cumsum(axis=1)[np.arange(len(labels)), labelpos] - np.random.rand(len(labels)) * regscores[np.arange(len(labels)), labelpos] #random number between cumulative sum up to true label - 1 and label
+
 
 N = 1000 #calibration
 M = 2000 #test
+classes = 10
 n = 3000
 alpha = 0.05
+k_reg = 5
+lambda_reg = 0.01
 
-model = classifier1.Net()
-model.load_state_dict(torch.load("models/mnist_bad.pth"))
+model = classifier2.Net()
+model.load_state_dict(torch.load("models/mnist_good.pth"))
 model.eval()
 
 data = MNIST(
@@ -52,22 +58,24 @@ test_images = images[~idx]
 test_labels = labels[~idx]
 
 
-ncscores = ncscore(calibration_scores, calibration_labels)
+ncscores = ncscore(calibration_scores, calibration_labels, k_reg, lambda_reg)
 
 quantile = np.ceil((N + 1) * (1 - alpha)) / N
-
-
 q_hat = np.quantile(ncscores, quantile, method="higher")
-test_order = np.flip(np.argsort(test_scores, axis=1), axis=1)
-test_partialsums = np.cumsum(np.flip(np.sort(test_scores, axis=1), axis=1), axis=1)
-prediction_sets = np.take_along_axis(test_partialsums <= q_hat,
-                                     test_order.argsort(axis=1),
-                                     axis=1)
+
+reg = np.array(k_reg*[0,] + (classes - k_reg)*[lambda_reg,])[np.newaxis,:]  
+test_sortedscores = np.sort(test_scores, axis=1, descending=True)
+
+test_order = np.flip(test_scores.argsort(axis=1), axis=1)
+test_regscores = test_sortedscores + reg
+test_partialsums = np.cumsum(test_regscores, axis=1)
+sorted_sets = (test_partialsums - np.random.rand(M, 1)*test_regscores) <= q_hat
+prediction_sets = np.take_along_axis(sorted_sets, test_order.argsort(axis=1), axis=1) #revert the pi permutation
 
 
 empirical_coverage = prediction_sets[np.arange(prediction_sets.shape[0]), test_labels].mean()
 
-print(empirical_coverage) #0.9465 
+print(empirical_coverage) 
 
 
 worst = np.argmin(test_scores[np.arange(M), test_labels])
@@ -95,5 +103,5 @@ ax_img.set_title(f"Coverage: {empirical_coverage:.4f}\nMean set size: {meansize:
 
 ax_bar.bar(sizes, counts, width=0.5, color='crimson', ec='black')
 
-plt.savefig('graphs/conformal_adaptive_goodmodel.png')
+plt.savefig('graphs/conformal_regularized_goodmodel.png')
 plt.show()
