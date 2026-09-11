@@ -11,14 +11,16 @@ class Net(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(28*28, 10)
+            nn.Linear(28*28, 50),
+            nn.ReLU(),
+            nn.Linear(50, 10)
         )
     
     def forward(self, x):
         x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
-    
+
 if __name__ == "__main__":
     traindata = MNIST(root="data", 
                  download=True,
@@ -27,12 +29,12 @@ if __name__ == "__main__":
     testdata = MNIST(root="data", download=True, train=False, transform=v2.ToTensor())
 
     model = Net()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
     loss_fn = nn.CrossEntropyLoss()
-    dataloader = torch.utils.data.DataLoader(traindata, batch_size = 8, shuffle=True)
+    dataloader = torch.utils.data.DataLoader(traindata, batch_size = 16, shuffle=True)
 
     #Training Loop
-    for epoch in range(7):
+    for epoch in range(10):
         model.train()
         for (image, label) in dataloader:
             logits = model(image)
@@ -41,7 +43,7 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
 
-    #testing
+#testing
     model.eval()
     correct = 0
     with torch.no_grad():
@@ -53,5 +55,4 @@ if __name__ == "__main__":
 
     print(model)
     print(f"Test Accuracy: {correct / len(testdata) * 100:.2f}%")
-    #torch.save(model.state_dict(), "models/mnist_good.pth")
-
+    torch.save(model.state_dict(), "models/mnist_good.pth")

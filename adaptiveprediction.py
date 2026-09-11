@@ -10,7 +10,6 @@ def ncscore(scores, labels):
     correctscores = scores[np.arange(len(labels)), labels].reshape(-1, 1)
     include = scores >= correctscores
     return np.sum(scores*include, axis=1)
-    pass
 
 N = 1000 #calibration
 M = 2000 #test
