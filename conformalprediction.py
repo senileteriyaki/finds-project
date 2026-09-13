@@ -80,4 +80,4 @@ ax_img.set_title(f"Coverage: {empirical_coverage:.4f}\nMean set size: {meansize:
 ax_bar.bar(sizes, counts, width=0.5, color='crimson', ec='black')
 
 plt.savefig('graphs/conformal_simple_badmodel.png')
-plt.show()
+plt.show() 

@@ -1,9 +1,12 @@
+import torch
 from ucimlrepo import fetch_ucirepo
 from sklearn.linear_model import QuantileRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 import matplotlib.pyplot as plt
 import numpy as np
+
+import quantilemodel
 
 # Fetch dataset
 communities_and_crime = fetch_ucirepo(id=183)
@@ -29,24 +32,15 @@ X_cal = imputer.transform(X_cal)
 
 print(X_cal.shape)
 
-upperReg = QuantileRegressor(
-    quantile=0.95,
-    alpha=1e-3
+model = quantilemodel.Net()
+model.load_state_dict(torch.load("models/crimebad.pth"))
+model.eval()
 
-)
+with torch.no_grad():
+    predictions = model(torch.Tensor(X_cal)).numpy()
+q_low = predictions[:,0]
+q_high = predictions[:,1]
 
-lowerReg = QuantileRegressor(
-    quantile=0.05,
-    alpha=1e-3
-)
-
-upperReg.fit(X_train, y_train)
-lowerReg.fit(X_train, y_train)
-
-print(upperReg.coef_)
-print(lowerReg.coef_)
-q_low = lowerReg.predict(X_cal)
-q_high = upperReg.predict(X_cal)
 
 scores = np.maximum(q_low - y_cal.to_numpy(), y_cal.to_numpy()-q_high)
 N = len(scores)
@@ -54,8 +48,11 @@ print(N)
 quantile = np.ceil((N + 1) * (1 - alpha))/N
 q_hat = np.quantile(scores, quantile)
 
-upper_val = upperReg.predict(X_val)
-lower_val = lowerReg.predict(X_val)
+with torch.no_grad():
+    predictions = model(torch.Tensor(X_val)).numpy()
+lower_val = predictions[:,0]
+upper_val = predictions[:,1]
+
 upper_conformal = upper_val + q_hat
 lower_conformal = lower_val - q_hat
 
@@ -165,5 +162,5 @@ ax.legend()
 ax.grid(alpha=0.2)
 
 plt.tight_layout()
-plt.savefig("graphs/regressionCQRscatter")
+plt.savefig("graphs/badNNregressionCQRscatter")
 plt.show() 
