@@ -1,5 +1,6 @@
 import random
 import torch
+from google.colab import userdata
 
 from datasets import load_dataset
 from transformers import (
@@ -16,7 +17,7 @@ model_id = "Qwen/Qwen3-8B"
 BATCH_SIZE = 1
 MAX_NEW_TOKENS = 10
 
-token = ""  # userdata.get("accestoken")
+token = userdata.get("token")
 
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
