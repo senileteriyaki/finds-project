@@ -34,7 +34,7 @@ X_cal = imputer.transform(X_cal)
 print(X_cal.shape)
 
 model = quantilewithpred.Net()
-model.load_state_dict(torch.load("models/crimebadwithpred.pth"))
+model.load_state_dict(torch.load("models/crimewithpred.pth"))
 model.eval()
 
 with torch.no_grad():
@@ -74,6 +74,17 @@ conformalcoverage = np.mean(
 
 print(coverage, conformalcoverage, q_hat)
 
+cal_lower = pred - q_hat * U
+cal_upper = pred + q_hat * U
+
+cal_coverage = np.mean(
+    (cal_lower <= y_cal_array) &
+    (y_cal_array <= cal_upper)
+)
+
+print("Calibration coverage:", cal_coverage)
+print("Validation coverage:", conformalcoverage)
+print("q_hat:", q_hat)
 
 # Sort by the true y value (optional, but makes the plot easier to read)
 sort_idx = np.argsort(y_val_array)

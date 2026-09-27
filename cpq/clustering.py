@@ -2,8 +2,9 @@
 from collections import Counter
 
 
-def is_equivalent(ansA, ansB, tokenizer, model):
-    prompt = f""" Classify whether answer A expresses the same answer as answer B.  Do not add outside knowledge.
+def is_equivalent(question, ansA, ansB, tokenizer, model):
+    prompt = f""" Classify whether answer A expresses the same answer as answer B to the question Do not add outside knowledge.
+    Question: {question}
     A: {ansA}
     B: {ansB}
     Output exactly: MATCH, NO_MATCH
@@ -11,10 +12,10 @@ def is_equivalent(ansA, ansB, tokenizer, model):
 
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     outputs = model.generate(**inputs, max_new_tokens=4)
-    generated = outputs[0, inputs["input_ids"].shape(1):]
+    generated = outputs[0, inputs["input_ids"].shape[1]:]
     out = tokenizer.decode(generated, skip_special_tokens=True)
 
-    return ("".join(out.lower().split()) == "match")
+    return ("match" in (out.lower().split()))
 
 class Cluster:
     def __init__(self, question):
@@ -22,10 +23,10 @@ class Cluster:
         self.clusters = []
         self.num = 0
     
-    def add(self, new_ans, tokenizer, model):
+    def add(self, question, new_ans, tokenizer, model):
         self.num += 1
         for c in self.clusters:
-            if is_equivalent(new_ans, c[0], tokenizer, model):
+            if is_equivalent(question, new_ans, c[0], tokenizer, model):
                 c.append(new_ans)
                 return c
         self.clusters.append([new_ans])

@@ -5,8 +5,8 @@ import string
 
 def sample(question, tokenizer, model, template):
     inputs = tokenizer(template + question, return_tensors="pt").to(model.device)
-    outputs = model.generate(**inputs, max_new_tokens=20)
-    generated = outputs[0, inputs["input_ids"].shape(1):]
+    outputs = model.generate(**inputs, max_new_tokens=10)
+    generated = outputs[0, inputs["input_ids"].shape[1]:]
     return tokenizer.decode(generated, skip_special_tokens=True).strip()
 
 
@@ -15,8 +15,8 @@ def query(question, beta, tokenizer, model, template, max_t):
     clusters = Cluster(question)
     t = 0
     while t < max_t:
-        sample = sample(question, tokenizer, model, template)
-        clusters.add(sample, tokenizer, model)
+        s = sample(question, tokenizer, model, template)
+        clusters.add(question, s, tokenizer, model)
         t += 1
         if (t>=2 and clusters.delta_hat() > beta):
             break
@@ -30,13 +30,15 @@ def find_beta(B, data, model, tokenizer, template): #finish this sometime
 def match_gold_to_cluster(clusters, question, aliases, tokenizer, model):
     for c in clusters.clusters:
         for alias in aliases:
-            if is_equivalent(alias, c[0], tokenizer, model):
+            if is_equivalent(question, alias, c[0], tokenizer, model):
                 return len(c)
     return None #represents EE
 
 def compute_qhat(B, alpha, beta_star, data, tokenizer, model, template):
     scores = []
-    for question, answer in data:
+    for row in data:
+        question = row["quetion"]
+        answer = row["answer"]
         gold_aliases = answer["aliases"]
         clusters, t = query(question, beta_star, tokenizer, model, template, 2*B)
         r = match_gold_to_cluster(clusters, question, gold_aliases, tokenizer, model)
@@ -46,7 +48,6 @@ def compute_qhat(B, alpha, beta_star, data, tokenizer, model, template):
             scores.append(1 - clusters.omega_hat(r))
     
     scores.append(float("inf"))
-    n = len(scores)
     quantile = 1 - alpha
     return np.quantile(scores, quantile)
 
