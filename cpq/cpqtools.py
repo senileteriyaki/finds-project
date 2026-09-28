@@ -4,7 +4,19 @@ import re
 import string
 
 def sample(question, tokenizer, model, template):
-    inputs = tokenizer(template + question, return_tensors="pt").to(model.device)
+    messages = [
+        {
+            "role": "user",
+            "content": template + question
+        }
+    ]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=False
+    )
+    inputs = tokenizer(text, return_tensors="pt").to(model.device)
     outputs = model.generate(**inputs, max_new_tokens=10)
     generated = outputs[0, inputs["input_ids"].shape[1]:]
     return tokenizer.decode(generated, skip_special_tokens=True).strip()

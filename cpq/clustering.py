@@ -3,19 +3,33 @@ from collections import Counter
 
 
 def is_equivalent(question, ansA, ansB, tokenizer, model):
-    prompt = f""" Classify whether answer A expresses the same answer as answer B to the question Do not add outside knowledge.
+    prompt = f""" Classify whether answer A expresses the same answer as answer B to the question. Do not add outside knowledge.
     Question: {question}
     A: {ansA}
     B: {ansB}
-    Output exactly: MATCH, NO_MATCH
+    Output exactly: MATCH, NO_MATCH. Output NOTHING else. 
     """
-
-    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate(**inputs, max_new_tokens=4)
+    messages = [
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+        enable_thinking=False
+    )
+    inputs = tokenizer(text, return_tensors="pt").to(model.device)
+    outputs = model.generate(**inputs, max_new_tokens=2)
     generated = outputs[0, inputs["input_ids"].shape[1]:]
     out = tokenizer.decode(generated, skip_special_tokens=True)
 
     label = out.strip().upper()
+    print(prompt)
+    print(label)
+
     if label == "MATCH":
         return True
     return False
