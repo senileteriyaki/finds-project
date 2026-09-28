@@ -49,7 +49,7 @@ def match_gold_to_cluster(clusters, question, aliases, tokenizer, model):
 def compute_qhat(B, alpha, beta_star, data, tokenizer, model, template):
     scores = []
     for row in data:
-        question = row["quetion"]
+        question = row["question"]
         answer = row["answer"]
         gold_aliases = answer["aliases"]
         clusters, t = query(question, beta_star, tokenizer, model, template, 2*B)

@@ -51,11 +51,11 @@ dataset = load_dataset(
 )
 ds = dataset.select_columns(["question", "answer"])
 
-Dcal, Dval = ds.train_test_split(test_size=0.1).values()
-Dcal1, Dcal2 = Dcal.train_test_split(test_size=0.1, train_size=0.1).values()
+Dcal, Dval = ds.train_test_split(test_size=0.1, seed=42).values()
+Dcal1, Dcal2 = Dcal.train_test_split(test_size=0.1, train_size=0.1, seed=42).values()
 
 B = 20
-alpha = 0.85
+alpha = 0.15
 
 template = (
     "Answer this trivia question with only the answer."
