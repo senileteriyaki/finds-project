@@ -15,7 +15,10 @@ def is_equivalent(question, ansA, ansB, tokenizer, model):
     generated = outputs[0, inputs["input_ids"].shape[1]:]
     out = tokenizer.decode(generated, skip_special_tokens=True)
 
-    return ("match" in (out.lower().split()))
+    label = out.strip().upper()
+    if label == "MATCH":
+        return True
+    return False
 
 class Cluster:
     def __init__(self, question):
