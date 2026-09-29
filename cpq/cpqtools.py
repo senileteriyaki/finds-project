@@ -36,7 +36,7 @@ def query(question, beta, tokenizer, model, template, max_t):
     return clusters, t
 
 def find_beta(B, data, model, tokenizer, template): #finish this sometime
-    return 0.01
+    return -0.1
 
 
 def match_gold_to_cluster(clusters, question, aliases, tokenizer, model):
