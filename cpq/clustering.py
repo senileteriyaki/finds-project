@@ -1,5 +1,6 @@
-
 from collections import Counter
+
+import cpqcache
 
 
 def is_equivalent(question, ansA, ansB, tokenizer, model):
@@ -9,6 +10,12 @@ def is_equivalent(question, ansA, ansB, tokenizer, model):
     B: {ansB}
     Output exactly: MATCH, NO_MATCH. Output NOTHING else. 
     """
+
+    cached = cpqcache.get_judgment(model, prompt)
+
+    if cached is not None:
+        return cached
+
     messages = [
         {
             "role": "user",
@@ -30,16 +37,17 @@ def is_equivalent(question, ansA, ansB, tokenizer, model):
     print(prompt)
     print(label)
 
-    if label == "MATCH":
-        return True
-    return False
+    result = label == "MATCH"
+    cpqcache.put_judgment(model, prompt, result)
+    return result
+
 
 class Cluster:
     def __init__(self, question):
         self.question = question
         self.clusters = []
         self.num = 0
-    
+
     def add(self, question, new_ans, tokenizer, model):
         self.num += 1
         for c in self.clusters:
@@ -51,17 +59,12 @@ class Cluster:
     def N(self, r):
         sizes = [len(x) for x in self.clusters if len(x) == r]
         return len(sizes)
-    
+
     def theta_hat(self):
         return self.N(1)/self.num
-    
+
     def delta_hat(self):
         return -2*self.N(2)/(self.num**2)
-    
-    def omega_hat(self,r):
+
+    def omega_hat(self, r):
         return ((r + 1)/self.num) * (self.N(r + 1)/self.N(r))
-
-
-    
-
-    

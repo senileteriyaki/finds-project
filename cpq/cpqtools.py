@@ -1,9 +1,19 @@
 import numpy as np
 from clustering import Cluster, is_equivalent
+import cpqcache
 import re
 import string
 
-def sample(question, tokenizer, model, template):
+
+def sample(question, tokenizer, model, template, sample_num):
+
+    saved = cpqcache.get_sample(model, template, question, sample_num)
+    if saved is not None:
+        return saved
+
+    if model is None:
+        raise RuntimeError("No saved sample for this question and no model was provided to generate one.")
+
     messages = [
         {
             "role": "user",
@@ -19,23 +29,26 @@ def sample(question, tokenizer, model, template):
     inputs = tokenizer(text, return_tensors="pt").to(model.device)
     outputs = model.generate(**inputs, max_new_tokens=10)
     generated = outputs[0, inputs["input_ids"].shape[1]:]
-    return tokenizer.decode(generated, skip_special_tokens=True).strip()
+    answer = tokenizer.decode(generated, skip_special_tokens=True).strip()
 
+    cpqcache.put_sample(model, template, question, sample_num, answer)
+    return answer
 
 
 def query(question, beta, tokenizer, model, template, max_t):
     clusters = Cluster(question)
     t = 0
     while t < max_t:
-        s = sample(question, tokenizer, model, template)
+        s = sample(question, tokenizer, model, template, sample_num=t)
         clusters.add(question, s, tokenizer, model)
         t += 1
-        if (t>=2 and clusters.delta_hat() > beta):
+        if (t >= 2 and clusters.delta_hat() > beta):
             break
 
     return clusters, t
 
-def find_beta(B, data, model, tokenizer, template): #finish this sometime
+
+def find_beta(B, data, model, tokenizer, template):  # finish this sometime
     return -0.1
 
 
@@ -44,7 +57,8 @@ def match_gold_to_cluster(clusters, question, aliases, tokenizer, model):
         for alias in aliases:
             if is_equivalent(question, alias, c[0], tokenizer, model):
                 return len(c)
-    return None #represents EE
+    return None  # represents EE
+
 
 def compute_qhat(B, alpha, beta_star, data, tokenizer, model, template):
     scores = []
@@ -58,10 +72,11 @@ def compute_qhat(B, alpha, beta_star, data, tokenizer, model, template):
             scores.append(2 - clusters.theta_hat())
         else:
             scores.append(1 - clusters.omega_hat(r))
-    
+
     scores.append(float("inf"))
     quantile = 1 - alpha
     return np.quantile(scores, quantile)
+
 
 def prediction_sets(question, beta_star, qhat, tokenizer, model, template, B):
     clusters, t = query(question, beta_star, tokenizer, model, template, 2*B)
@@ -71,13 +86,12 @@ def prediction_sets(question, beta_star, qhat, tokenizer, model, template, B):
         score = 1 - clusters.omega_hat(r)
         if score <= qhat:
             pred.append(c[0])
-    
+
     EEscore = 2 - clusters.theta_hat()
     if EEscore <= qhat:
         pred.append("EE")
-    
-    return pred
 
+    return pred
 
 
 def normalize_answer(s: str) -> str:
