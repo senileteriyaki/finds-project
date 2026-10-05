@@ -1,5 +1,5 @@
 import numpy as np
-from clustering import Cluster, is_equivalent
+from clustering import Cluster, is_equivalent, betterCluster
 import cpqcache
 import re
 import string
@@ -36,13 +36,13 @@ def sample(question, tokenizer, model, template, sample_num):
 
 
 def query(question, beta, tokenizer, model, template, max_t):
-    clusters = Cluster(question)
+    clusters = betterCluster(question)
     t = 0
     while t < max_t:
         s = sample(question, tokenizer, model, template, sample_num=t)
         clusters.add(question, s, tokenizer, model)
         t += 1
-        if (t >= 2 and clusters.delta_hat() > beta):
+        if (t >= 5 and clusters.delta_hat() > beta):
             break
 
     return clusters, t

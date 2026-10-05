@@ -97,4 +97,5 @@ print(
     f"Set size: {avg_setsize/num_examples} "
     f"EE fraction: {ee_count/num_examples} "
     f"Coverage: {coverage/num_examples}"
+    f"q_hat": {q_hat}
 )
