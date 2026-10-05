@@ -11,11 +11,14 @@ def is_equivalent(question, ansA, ansB, tokenizer, model):
     Output exactly: MATCH, NO_MATCH. Output NOTHING else. 
     """
 
-    cached = cpqcache.get_judgment(model, prompt)
+    cached = cpqcache.get_judgment(prompt)
 
     if cached is not None:
         return cached
 
+    if model is None:
+        raise ValueError("Model is None, nothing saved.")
+    
     messages = [
         {
             "role": "user",
@@ -38,7 +41,7 @@ def is_equivalent(question, ansA, ansB, tokenizer, model):
     print(label)
 
     result = label == "MATCH"
-    cpqcache.put_judgment(model, prompt, result)
+    cpqcache.put_judgment(prompt, result)
     return result
 
 

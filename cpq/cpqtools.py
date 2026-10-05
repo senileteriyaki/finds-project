@@ -7,12 +7,12 @@ import string
 
 def sample(question, tokenizer, model, template, sample_num):
 
-    saved = cpqcache.get_sample(model, template, question, sample_num)
+    saved = cpqcache.get_sample(template, question, sample_num)
     if saved is not None:
         return saved
 
     if model is None:
-        raise RuntimeError("No saved sample for this question and no model was provided to generate one.")
+        raise RuntimeError("No saved sample, No model.")
 
     messages = [
         {
@@ -31,7 +31,7 @@ def sample(question, tokenizer, model, template, sample_num):
     generated = outputs[0, inputs["input_ids"].shape[1]:]
     answer = tokenizer.decode(generated, skip_special_tokens=True).strip()
 
-    cpqcache.put_sample(model, template, question, sample_num, answer)
+    cpqcache.put_sample(template, question, sample_num, answer)
     return answer
 
 
