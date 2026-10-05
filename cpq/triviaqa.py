@@ -55,7 +55,7 @@ Dcal1 = ds.select(range(0, 100))
 Dcal2 = ds.select(range(1000, 1100))
 Dval = ds.select(range(2000, 2100))
 
-B = 20
+B = 15
 alpha = 0.3
 
 template = (
