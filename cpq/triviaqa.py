@@ -18,8 +18,7 @@ model_id = "Qwen/Qwen3-8B"
 BATCH_SIZE = 1
 MAX_NEW_TOKENS = 10
 
-token = userdata.get("token")
-
+token = ""
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
@@ -57,7 +56,7 @@ Dcal2 = ds.select(range(1000, 1100))
 Dval = ds.select(range(2000, 2100))
 
 B = 20
-alpha = 0.15
+alpha = 0.3
 
 template = (
     "Answer this trivia question with only the answer."
