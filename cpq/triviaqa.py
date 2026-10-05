@@ -1,6 +1,7 @@
 import random
 import torch
 from google.colab import userdata
+import numpy as np
 
 from datasets import load_dataset
 from transformers import (
@@ -49,10 +50,11 @@ dataset = load_dataset(
     "rc.nocontext",
     split="validation",
 )
-ds = dataset.select_columns(["question", "answer"])
+ds = dataset.select_columns(["question", "answer"]).shuffle(seed=42)
 
-Dcal, Dval = ds.train_test_split(test_size=0.1, seed=42).values()
-Dcal1, Dcal2 = Dcal.train_test_split(test_size=0.1, train_size=0.1, seed=42).values()
+Dcal1 = ds.select(range(0, 100))
+Dcal2 = ds.select(range(1000, 1100))
+Dval = ds.select(range(2000, 2100))
 
 B = 20
 alpha = 0.15
