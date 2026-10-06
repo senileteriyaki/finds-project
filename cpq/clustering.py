@@ -106,7 +106,7 @@ class betterCluster:
         return self.sgt[r]
                                           
     
-    def simple_good_turing(freq_counts, n, min_distinct=3, renormalize=True):
+    def simple_good_turing(self, freq_counts, n, min_distinct=3, renormalize=True):
         rs = sorted(freq_counts)
         mle = {r: r / n for r in rs}
 

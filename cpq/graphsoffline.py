@@ -115,9 +115,9 @@ for alpha in alpha_trials:
     coverage.append(res[2])
 
 plots = [
-    (setsize, "Set Size", "alpha vs Set Size", "x_vs_setsize.png"),
-    (eefrac, "EE Fraction", "alpha vs EE Fraction", "x_vs_eefrac.png"),
-    (coverage, "Coverage", "alpha vs Coverage", "x_vs_coverage.png"),
+    (setsize, "Set Size", "alpha vs Set Size", "alpha_vs_setsize.png"),
+    (eefrac, "EE Fraction", "alpha vs EE Fraction", "alpha_vs_eefrac.png"),
+    (coverage, "Coverage", "alpha vs Coverage", "alpha_vs_coverage.png"),
 ]
 
 for y, ylabel, title, filename in plots:

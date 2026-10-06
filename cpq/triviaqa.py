@@ -18,7 +18,6 @@ model_id = "Qwen/Qwen3-8B"
 BATCH_SIZE = 1
 MAX_NEW_TOKENS = 10
 
-token = ""
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
@@ -97,5 +96,5 @@ print(
     f"Set size: {avg_setsize/num_examples} "
     f"EE fraction: {ee_count/num_examples} "
     f"Coverage: {coverage/num_examples}"
-    f"q_hat": {q_hat}
+    f"q_hat: {q_hat}"
 )
