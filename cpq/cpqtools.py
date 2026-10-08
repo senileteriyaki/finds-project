@@ -42,7 +42,7 @@ def query(question, beta, tokenizer, model, template, max_t):
         s = sample(question, tokenizer, model, template, sample_num=t)
         clusters.add(question, s, tokenizer, model)
         t += 1
-        if (t >= 5 and clusters.delta_hat() > beta):
+        if (t >= 15 and clusters.delta_hat() > beta):
             break
 
     return clusters, t

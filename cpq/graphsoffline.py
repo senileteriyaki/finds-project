@@ -41,10 +41,10 @@ def runCPQ(Dval, Dcal2, tokenizer, model, template, B, beta_star, alpha):
         if is_covered:
             coverage += 1
 
-        if random.random() < 0.005:
-            print(seen_preds, "EE" if has_ee else "", answer["aliases"][0])
+        if random.random() < 0.02:
+            print(alpha, ": ", seen_preds, "EE" if has_ee else "", answer["aliases"][0])
 
-    return (avg_setsize/num_examples, ee_count/num_examples, coverage/num_examples)
+    return (avg_setsize/num_examples, ee_count/num_examples, coverage/num_examples, q_hat)
 
 
 model_id = "Qwen/Qwen3-8B"
@@ -103,22 +103,23 @@ template = (
 
 beta_star = find_beta(B, Dcal1, None, None, template)
 
-alpha_trials = np.arange(0.05, 0.40, 0.05).tolist()
+alpha_trials = np.arange(0.05, 0.50, 0.05).tolist()
 eefrac = []
 coverage = []
 setsize = []
-
+q_hat = []
 for alpha in alpha_trials:
     res = runCPQ(Dval, Dcal2, tokenizer, model, template, B, beta_star, alpha)
     setsize.append(res[0])
     eefrac.append(res[1])
     coverage.append(res[2])
-
+    q_hat.append(res[3])
 plots = [
-    (setsize, "Set Size", "alpha vs Set Size", "alpha_vs_setsize.png"),
-    (eefrac, "EE Fraction", "alpha vs EE Fraction", "alpha_vs_eefrac.png"),
-    (coverage, "Coverage", "alpha vs Coverage", "alpha_vs_coverage.png"),
+    (setsize, "Set Size", "alpha vs Set Size", "graphs/HighMinalpha_vs_setsize.png"),
+    (eefrac, "EE Fraction", "alpha vs EE Fraction", "graphs/HighMinalpha_vs_eefrac.png"),
+    (coverage, "Coverage", "alpha vs Coverage", "graphs/HighMinalpha_vs_coverage.png"),
 ]
+print(q_hat)
 
 for y, ylabel, title, filename in plots:
     fig, ax = plt.subplots(figsize=(8, 5))
