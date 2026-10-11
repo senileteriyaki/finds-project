@@ -55,4 +55,4 @@ if __name__ == "__main__":
 
     print(model)
     print(f"Test Accuracy: {correct / len(testdata) * 100:.2f}%")
-    torch.save(model.state_dict(), "models/mnist_good.pth")
+    #torch.save(model.state_dict(), "models/mnist_good.pth")

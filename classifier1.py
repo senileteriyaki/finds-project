@@ -32,7 +32,7 @@ if __name__ == "__main__":
     dataloader = torch.utils.data.DataLoader(traindata, batch_size = 8, shuffle=True)
 
     #Training Loop
-    for epoch in range(7):
+    for epoch in range(4):
         model.train()
         for (image, label) in dataloader:
             logits = model(image)
@@ -53,5 +53,5 @@ if __name__ == "__main__":
 
     print(model)
     print(f"Test Accuracy: {correct / len(testdata) * 100:.2f}%")
-    #torch.save(model.state_dict(), "models/mnist_good.pth")
+    #torch.save(model.state_dict(), "models/mnist_bad.pth")
 

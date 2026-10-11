@@ -72,7 +72,7 @@ class Cluster:
     def omega_hat(self, r):
         return ((r + 1)/self.num) * (self.N(r + 1)/self.N(r))
 
-class betterCluster:
+class betterCluster: ##not Using
     def __init__(self, question):
         self.question = question
         self.clusters = []
@@ -161,3 +161,30 @@ class betterCluster:
                 p = {r: v * target / seen for r, v in p.items()}
 
         return p
+
+class FrequencyCluster:
+    def __init__(self, question):
+        self.question = question
+        self.clusters = []
+        self.num = 0
+
+    def add(self, question, new_ans, tokenizer, model):
+        self.num += 1
+        for c in self.clusters:
+            if is_equivalent(question, new_ans, c[0], tokenizer, model):
+                c.append(new_ans)
+                return c
+        self.clusters.append([new_ans])
+
+    def N(self, r):
+        sizes = [len(x) for x in self.clusters if len(x) == r]
+        return len(sizes)
+
+    def theta_hat(self):
+        return self.N(1)/self.num
+
+    def delta_hat(self):
+        return -2*self.N(2)/(self.num**2)
+
+    def omega_hat(self, r):
+        return ((r + 1)/self.num) * (self.N(r + 1)/self.N(r))
