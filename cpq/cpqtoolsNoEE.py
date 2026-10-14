@@ -1,5 +1,5 @@
 import numpy as np
-from clustering import Cluster, is_equivalent, betterCluster
+from clustering import Cluster, FrequencyCluster, is_equivalent, betterCluster
 import cpqcache
 import re
 import string
@@ -36,7 +36,7 @@ def sample(question, tokenizer, model, template, sample_num):
 
 
 def query(question, beta, tokenizer, model, template, max_t):
-    clusters = betterCluster(question)
+    clusters = FrequencyCluster(question)
     t = 0
     while t < max_t:
         s = sample(question, tokenizer, model, template, sample_num=t)
