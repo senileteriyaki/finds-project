@@ -116,9 +116,9 @@ for alpha in alpha_trials:
     coverage.append(res[2])
     q_hat.append(res[3])
 plots = [
-    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/FreqHighMin1malpha_EE_vs_setsize.png"),
-    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/FreqHighMin1malpha_EE_vs_eefrac.png"),
-    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/FreqHighMin1malpha_EE_vs_coverage.png"),
+    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/HighMin1malpha_EE_vs_setsize.png"),
+    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/HighMin1malpha_EE_vs_eefrac.png"),
+    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/HighMin1malpha_EE_vs_coverage.png"),
 ]
 print(q_hat)
 

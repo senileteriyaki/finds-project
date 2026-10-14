@@ -36,7 +36,7 @@ def sample(question, tokenizer, model, template, sample_num):
 
 
 def query(question, beta, tokenizer, model, template, max_t): ##FREQUENCY BASED version
-    clusters = FrequencyCluster(question)
+    clusters = Cluster(question)
     t = 0
     while t < max_t:
         s = sample(question, tokenizer, model, template, sample_num=t)
