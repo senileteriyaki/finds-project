@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import quantilemodel
+import quantilewithpred
 
 # Fetch dataset
 communities_and_crime = fetch_ucirepo(id=183)
@@ -32,14 +33,14 @@ X_cal = imputer.transform(X_cal)
 
 print(X_cal.shape)
 
-model = quantilemodel.Net()
-model.load_state_dict(torch.load("models/crimebad.pth"))
+model = quantilewithpred.Net()
+model.load_state_dict(torch.load("models/crimebadwithpred.pth"))
 model.eval()
 
 with torch.no_grad():
     predictions = model(torch.Tensor(X_cal)).numpy()
 q_low = predictions[:,0]
-q_high = predictions[:,1]
+q_high = predictions[:,2]
 
 
 scores = np.maximum(q_low - y_cal.to_numpy(), y_cal.to_numpy()-q_high)
@@ -51,7 +52,7 @@ q_hat = np.quantile(scores, quantile)
 with torch.no_grad():
     predictions = model(torch.Tensor(X_val)).numpy()
 lower_val = predictions[:,0]
-upper_val = predictions[:,1]
+upper_val = predictions[:,2]
 
 upper_conformal = upper_val + q_hat
 lower_conformal = lower_val - q_hat
@@ -162,5 +163,5 @@ ax.legend()
 ax.grid(alpha=0.2)
 
 plt.tight_layout()
-plt.savefig("graphs/badNNregressionCQRscatter")
+plt.savefig("graphs/badNNregressionCQRscatterV2")
 plt.show() 

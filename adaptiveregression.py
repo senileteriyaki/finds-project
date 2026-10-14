@@ -34,7 +34,7 @@ X_cal = imputer.transform(X_cal)
 print(X_cal.shape)
 
 model = quantilewithpred.Net()
-model.load_state_dict(torch.load("models/crimewithpred.pth"))
+model.load_state_dict(torch.load("models/crimebadwithpred.pth"))
 model.eval()
 
 with torch.no_grad():
@@ -125,7 +125,7 @@ ax.scatter(
     x,
     lower_model_sorted,
     color="blue",
-    linewidth=1,
+    linewidth=0.7,
     label="Model lower quantile"
 )
 
@@ -133,9 +133,10 @@ ax.scatter(
     x,
     upper_model_sorted,
     color="blue",
-    linewidth=1,
+    linewidth=0.7,
     label="Model upper quantile"
 )
+
 
 # Conformal bounds
 ax.scatter(
@@ -143,7 +144,7 @@ ax.scatter(
     lower_conf_sorted,
     color="darkorange",
     linestyle="--",
-    linewidth=1,
+    linewidth=0.5,
     label="Conformal lower bound"
 )
 
@@ -152,7 +153,7 @@ ax.scatter(
     upper_conf_sorted,
     color="darkorange",
     linestyle="--",
-    linewidth=1,
+    linewidth=0.5,
     label="Conformal upper bound"
 )
 
@@ -164,6 +165,15 @@ ax.scatter(
     s=15,
     alpha=0.7,
     label="True y"
+)
+
+ax.scatter(
+    x,
+    pred_val[sort_idx],
+    color="green",
+    s=15,
+    alpha=0.7,
+    label="Predicted y"
 )
 
 ax.set_xlabel("Validation observations (sorted by true y)")
@@ -179,5 +189,5 @@ ax.legend()
 ax.grid(alpha=0.2)
 
 plt.tight_layout()
-plt.savefig("graphs/NNregressionAdaptive_bad")
+plt.savefig("graphs/NNregressionAdaptive_badV2")
 plt.show() 
