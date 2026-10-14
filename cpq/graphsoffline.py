@@ -104,6 +104,7 @@ template = (
 beta_star = find_beta(B, Dcal1, None, None, template)
 
 alpha_trials = np.arange(0.05, 0.50, 0.05).tolist()
+one_minus_alpha = [1 - a for a in alpha_trials]
 eefrac = []
 coverage = []
 setsize = []
@@ -115,18 +116,23 @@ for alpha in alpha_trials:
     coverage.append(res[2])
     q_hat.append(res[3])
 plots = [
-    (setsize, "Set Size", "alpha vs Set Size", "graphs/HighMinalpha_vs_setsize.png"),
-    (eefrac, "EE Fraction", "alpha vs EE Fraction", "graphs/HighMinalpha_vs_eefrac.png"),
-    (coverage, "Coverage", "alpha vs Coverage", "graphs/HighMinalpha_vs_coverage.png"),
+    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/HighMin1malpha_EE_vs_setsize.png"),
+    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/HighMin1malpha_EE_vs_eefrac.png"),
+    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/HighMin1malpha_EE_vs_coverage.png"),
 ]
 print(q_hat)
 
 for y, ylabel, title, filename in plots:
     fig, ax = plt.subplots(figsize=(8, 5))
 
-    ax.scatter(alpha_trials, y, s=30, alpha=0.8)
+    ax.scatter(one_minus_alpha, y, s=30, alpha=0.8)
 
-    ax.set_xlabel("Alpha")
+    # Target coverage line (y = x): coverage should sit at or above it
+    if ylabel == "Coverage":
+        ax.plot(one_minus_alpha, one_minus_alpha, "k--", alpha=0.5, label="Target (1 - alpha)")
+        ax.legend()
+
+    ax.set_xlabel("1 - alpha")
     ax.set_ylabel(ylabel)
     ax.set_title(title)
 

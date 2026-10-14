@@ -12,7 +12,7 @@ from transformers import (
 )
 """
 
-from cpqtools import find_beta, compute_qhat, prediction_sets, normalize_answer
+from cpqtoolsNoEE import find_beta, compute_qhat, prediction_sets, normalize_answer
 
 def runCPQ(Dval, Dcal2, tokenizer, model, template, B, beta_star, alpha):
 
