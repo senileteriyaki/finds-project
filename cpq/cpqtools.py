@@ -75,7 +75,7 @@ def compute_qhat(B, alpha, beta_star, data, tokenizer, model, template):
 
     scores.append(float("inf"))
     quantile = 1 - alpha
-    return np.quantile(scores, quantile)
+    return np.quantile(scores, quantile, method="higher")
 
 
 def prediction_sets(question, beta_star, qhat, tokenizer, model, template, B):
