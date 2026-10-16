@@ -13,6 +13,7 @@ from transformers import (
 """
 
 from cpqtools import find_beta, compute_qhat, prediction_sets, normalize_answer
+from clustering import is_equivalent
 
 def runCPQ(Dval, Dcal2, tokenizer, model, template, B, beta_star, alpha):
 
@@ -37,7 +38,13 @@ def runCPQ(Dval, Dcal2, tokenizer, model, template, B, beta_star, alpha):
         if has_ee:
             ee_count += 1
 
-        is_covered = has_ee or any(a in seen_preds for a in answer["normalized_aliases"])
+        is_covered = False
+        for a in answer["normalized_aliases"]:
+            for s in seen_preds:
+                if is_equivalent(question, a, s, tokenizer, model):
+                    is_covered = True
+                    break
+        is_covered = is_covered or has_ee
         if is_covered:
             coverage += 1
 
@@ -89,10 +96,10 @@ dataset = load_dataset(
 ds = dataset.select_columns(["question", "answer"]).shuffle(seed=42)
 
 Dcal1 = ds.select(range(0, 100))
-Dcal2 = ds.select(range(1000, 1100))
-Dval = ds.select(range(2000, 2100))
+Dcal2 = ds.select(range(1000, 1200))
+Dval = ds.select(range(2000, 2200))
 
-B = 20
+B = 16
 alpha = 0.3
 
 template = (
