@@ -35,21 +35,55 @@ def sample(question, tokenizer, model, template, sample_num):
     return answer
 
 
-def query(question, beta, tokenizer, model, template, max_t): ##FREQUENCY BASED version
+def query(question, beta, tokenizer, model, template, max_t, min_t=15): ##FREQUENCY BASED version
     clusters = Cluster(question)
     t = 0
     while t < max_t:
         s = sample(question, tokenizer, model, template, sample_num=t)
         clusters.add(question, s, tokenizer, model)
         t += 1
-        if (t >= 15 and clusters.delta_hat() > beta):
+        if (t >= min_t and clusters.delta_hat() > beta):
             break
 
     return clusters, t
 
 
-def find_beta(B, data, model, tokenizer, template):  # finish this sometime
-    return -0.1
+def find_beta(B, data, model, tokenizer, template, min_t=8):  # finish this sometime
+    all_delta_hats = []
+    for row in data:
+        delta_hats = []
+        question = row["question"]
+        clusters = Cluster(question)
+
+        for t in range(2*B):
+            s = sample(question, tokenizer, model, template, sample_num=t)
+            clusters.add(question, s, tokenizer, model)
+            if t + 1 >= min_t:
+                delta_hats.append(clusters.delta_hat())
+        all_delta_hats.append(delta_hats)
+    
+    def avg_t(beta):
+        sum = 0
+        for delta_hats in all_delta_hats:
+            T = 2*B
+            for i in range(0, len(delta_hats)):
+                if delta_hats[i] > beta:
+                    T = (i + min_t) #because we started range at min_t
+                    break
+            sum += T
+        return sum / len(all_delta_hats)
+    
+        
+    betas = -np.logspace(-3, -1, 30)
+    possible_betas = [b for b in betas if avg_t(b) <= B]
+    print("Average T for each beta: ", {b: avg_t(b) for b in betas})
+    print("Possible betas: ", possible_betas)
+    if possible_betas:
+        return max(possible_betas)
+    else:
+        print("No suitable beta found. Returning default value of -0.1.")
+        return -0.1 #default value 
+
 
 
 def match_gold_to_cluster(clusters, question, aliases, tokenizer, model):
@@ -89,7 +123,7 @@ def prediction_sets(question, beta_star, qhat, tokenizer, model, template, B):
 
     EEscore = 2 - clusters.theta_hat()
     if EEscore <= qhat:
-        pred.append("EE")
+        return ["EE"]
 
     return pred
 
