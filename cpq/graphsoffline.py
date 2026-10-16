@@ -116,16 +116,16 @@ for alpha in alpha_trials:
     coverage.append(res[2])
     q_hat.append(res[3])
 plots = [
-    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/HighMin1malpha_EE_vs_setsize.png"),
-    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/HighMin1malpha_EE_vs_eefrac.png"),
-    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/HighMin1malpha_EE_vs_coverage.png"),
+    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/HighMin1malpha_EE_vs_setsizeV1.png"),
+    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/HighMin1malpha_EE_vs_eefracV1.png"),
+    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/HighMin1malpha_EE_vs_coverageV1.png"),
 ]
 print(q_hat)
 
 for y, ylabel, title, filename in plots:
     fig, ax = plt.subplots(figsize=(8, 5))
 
-    ax.scatter(one_minus_alpha, y, s=30, alpha=0.8)
+    ax.plot(one_minus_alpha, y, marker="o", linestyle="-",  alpha=0.8)
 
     # Target coverage line (y = x): coverage should sit at or above it
     if ylabel == "Coverage":
