@@ -72,6 +72,8 @@ def makegraphs(idx, bad_scores, good_scores, labels, N):
                  label='Lower Accuracy Model')
     axes[1].plot(x, good_coverage, marker='s', linestyle='-',
                  label='Higher Accuracy Model')
+    axes[1].plot(x, x, color='black', linestyle='--',
+                 label=r'Target coverage ($y = 1 - \alpha$)')
     axes[1].set_xlabel(r'$1 - \alpha$')
     axes[1].set_ylabel('Coverage')
     axes[1].set_title(r'Coverage vs. $1 - \alpha$')
