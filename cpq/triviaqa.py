@@ -17,6 +17,7 @@ model_id = "Qwen/Qwen3-8B"
 
 BATCH_SIZE = 1
 MAX_NEW_TOKENS = 10
+token = "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"
 
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -51,8 +52,8 @@ dataset = load_dataset(
 ds = dataset.select_columns(["question", "answer"]).shuffle(seed=42)
 
 Dcal1 = ds.select(range(0, 100))
-Dcal2 = ds.select(range(1000, 1100))
-Dval = ds.select(range(2000, 2100))
+Dcal2 = ds.select(range(1000, 1200))
+Dval = ds.select(range(2000, 2200))
 
 B = 15
 alpha = 0.3

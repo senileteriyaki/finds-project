@@ -4,13 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from datasets import load_dataset
-"""
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
     BitsAndBytesConfig,
 )
-"""
 
 from cpqtools import find_beta, compute_qhat, prediction_sets, normalize_answer
 from clustering import is_equivalent
@@ -61,8 +59,7 @@ MAX_NEW_TOKENS = 10
 
 model = None #don't need since we are using cached samples
 tokenizer = None 
-"""
-token = ""
+token = "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"
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
@@ -86,7 +83,6 @@ model.eval()
 
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
-"""
 
 dataset = load_dataset(
     "mandarjoshi/trivia_qa",
@@ -99,7 +95,7 @@ Dcal1 = ds.select(range(0, 100))
 Dcal2 = ds.select(range(1000, 1200))
 Dval = ds.select(range(2000, 2200))
 
-B = 16
+B = 15
 alpha = 0.3
 
 template = (
@@ -109,8 +105,9 @@ template = (
 )
 
 beta_star = find_beta(B, Dcal1, None, None, template)
+print("beta", beta_star)
 
-alpha_trials = np.arange(0.05, 0.50, 0.05).tolist()
+alpha_trials = np.arange(0.05, 0.75, 0.05).tolist()
 one_minus_alpha = [1 - a for a in alpha_trials]
 eefrac = []
 coverage = []
@@ -123,9 +120,9 @@ for alpha in alpha_trials:
     coverage.append(res[2])
     q_hat.append(res[3])
 plots = [
-    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/HighMin1malpha_EE_vs_setsizeV1.png"),
-    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/HighMin1malpha_EE_vs_eefracV1.png"),
-    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/HighMin1malpha_EE_vs_coverageV1.png"),
+    (setsize, "Set Size", "1 - alpha vs Set Size", "graphs/HighMin1malpha_EE_vs_setsizeV2.png"),
+    (eefrac, "EE Fraction", "1 - alpha vs EE Fraction", "graphs/HighMin1malpha_EE_vs_eefracV2.png"),
+    (coverage, "Coverage", "1 - alpha vs Coverage", "graphs/HighMin1malpha_EE_vs_coverageV2.png"),
 ]
 print(q_hat)
 
