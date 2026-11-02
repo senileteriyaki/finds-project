@@ -59,7 +59,7 @@ MAX_NEW_TOKENS = 10
 
 model = None #don't need since we are using cached samples
 tokenizer = None 
-token = "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"
+token = ""
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",

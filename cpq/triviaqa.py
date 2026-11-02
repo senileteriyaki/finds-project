@@ -17,7 +17,7 @@ model_id = "Qwen/Qwen3-8B"
 
 BATCH_SIZE = 1
 MAX_NEW_TOKENS = 10
-token = "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"
+token = ""
 
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,

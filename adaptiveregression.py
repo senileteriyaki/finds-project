@@ -164,7 +164,7 @@ ax.scatter(
     color="black",
     s=15,
     alpha=0.7,
-    label="True y"
+    label="True crime rate"
 )
 
 ax.scatter(
@@ -173,11 +173,11 @@ ax.scatter(
     color="green",
     s=15,
     alpha=0.7,
-    label="Predicted y"
+    label="Predicted crime rate"
 )
 
-ax.set_xlabel("Validation observations (sorted by true y)")
-ax.set_ylabel("y")
+ax.set_xlabel("Validation observations (sorted by true crime rate)")
+ax.set_ylabel("Crime Rate")
 ax.set_title(
     f"Quantile Regression vs. Conformal Prediction Intervals\n"
     f"Model coverage = {coverage:.3f}, "

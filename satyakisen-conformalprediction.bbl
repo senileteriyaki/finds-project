@@ -1,0 +1,203 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{rapspaper}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=43221b8a943a6ec3bd389381e2e5e793}{%
+           family={Angelopoulos},
+           familyi={A\bibinitperiod},
+           given={Anastasios},
+           giveni={A\bibinitperiod}}}%
+        {{hash=5bedf42bce17b8dfd1813d85cc06234a}{%
+           family={Bates},
+           familyi={B\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c75a5377b6dc5213831576e88ffe553c}{%
+           family={Malik},
+           familyi={M\bibinitperiod},
+           given={Jitendra},
+           giveni={J\bibinitperiod}}}%
+        {{hash=8a36116840c7ee55901618c95fd08a58}{%
+           family={Jordan},
+           familyi={J\bibinitperiod},
+           given={Michael\bibnamedelima I.},
+           giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+      }
+      \strng{namehash}{6aecf343d9b921786e58d3a86ac3b810}
+      \strng{fullhash}{c37088781bfb6a0c5de1850b8471c2de}
+      \strng{fullhashraw}{c37088781bfb6a0c5de1850b8471c2de}
+      \strng{bibnamehash}{6aecf343d9b921786e58d3a86ac3b810}
+      \strng{authorbibnamehash}{6aecf343d9b921786e58d3a86ac3b810}
+      \strng{authornamehash}{6aecf343d9b921786e58d3a86ac3b810}
+      \strng{authorfullhash}{c37088781bfb6a0c5de1850b8471c2de}
+      \strng{authorfullhashraw}{c37088781bfb6a0c5de1850b8471c2de}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.CV}
+      \field{eprinttype}{arXiv}
+      \field{title}{Uncertainty Sets for Image Classifiers using Conformal Prediction}
+      \field{year}{2022}
+      \verb{eprint}
+      \verb 2009.14193
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2009.14193
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2009.14193
+      \endverb
+    \endentry
+    \entry{introcp}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=f4d2f42e0342b9eff9fae3b5f334c64d}{%
+           family={Angelopoulos},
+           familyi={A\bibinitperiod},
+           given={Anastasios\bibnamedelima N.},
+           giveni={A\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=5bedf42bce17b8dfd1813d85cc06234a}{%
+           family={Bates},
+           familyi={B\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{fullhash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{fullhashraw}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{bibnamehash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{authorbibnamehash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{authornamehash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{authorfullhash}{cb07802f042d1fcc451b6d432eafcb2f}
+      \strng{authorfullhashraw}{cb07802f042d1fcc451b6d432eafcb2f}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{title}{A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification}
+      \field{year}{2022}
+      \verb{eprint}
+      \verb 2107.07511
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2107.07511
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2107.07511
+      \endverb
+    \endentry
+    \entry{cpqpaper}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=43be5d293b63cc34142d34d19520c284}{%
+           family={Noorani},
+           familyi={N\bibinitperiod},
+           given={Sima},
+           giveni={S\bibinitperiod}}}%
+        {{hash=bc9b09cfa5fe6b5c79e8a85cc3368d6e}{%
+           family={Kiyani},
+           familyi={K\bibinitperiod},
+           given={Shayan},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e5488f354cfec1a4f86243331b4986dc}{%
+           family={Pappas},
+           familyi={P\bibinitperiod},
+           given={George},
+           giveni={G\bibinitperiod}}}%
+        {{hash=2ae4b63ed737cd7c460502a3d6aa594a}{%
+           family={Hassani},
+           familyi={H\bibinitperiod},
+           given={Hamed},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{ef79249c21e48eae594fe8fd6c9e7bd2}
+      \strng{fullhash}{5173fa9afd47e049926c8181a98a2136}
+      \strng{fullhashraw}{5173fa9afd47e049926c8181a98a2136}
+      \strng{bibnamehash}{ef79249c21e48eae594fe8fd6c9e7bd2}
+      \strng{authorbibnamehash}{ef79249c21e48eae594fe8fd6c9e7bd2}
+      \strng{authornamehash}{ef79249c21e48eae594fe8fd6c9e7bd2}
+      \strng{authorfullhash}{5173fa9afd47e049926c8181a98a2136}
+      \strng{authorfullhashraw}{5173fa9afd47e049926c8181a98a2136}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.LG}
+      \field{eprinttype}{arXiv}
+      \field{title}{Conformal Prediction Beyond the Seen: A Missing Mass Perspective for Uncertainty Quantification in Generative Models}
+      \field{year}{2025}
+      \verb{eprint}
+      \verb 2506.05497
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2506.05497
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2506.05497
+      \endverb
+    \endentry
+    \entry{vovkbook}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=bef6907ff5daebb69843cf35c8af1a83}{%
+           family={Vovk},
+           familyi={V\bibinitperiod},
+           given={Vladimir},
+           giveni={V\bibinitperiod}}}%
+        {{hash=238508c82fcaf90137493a259ad25a18}{%
+           family={Gammerman},
+           familyi={G\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod}}}%
+        {{hash=071635b97777823135be2ea970911b06}{%
+           family={Shafer},
+           familyi={S\bibinitperiod},
+           given={Glenn},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {English}%
+      }
+      \list{publisher}{1}{%
+        {New York, NY: Springer}%
+      }
+      \strng{namehash}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{fullhash}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{fullhashraw}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{bibnamehash}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{authorbibnamehash}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{authornamehash}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{authorfullhash}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \strng{authorfullhashraw}{fa9a9e9dbab4678abc8d15e1873b8626}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{0-387-00152-2}
+      \field{title}{Algorithmic learning in a random world.}
+      \field{year}{2005}
+      \keyw{68-02,62M20,68Q30,68T05}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -149,10 +149,10 @@ ax.scatter(
     color="black",
     s=15,
     alpha=0.7,
-    label="True y"
+    label="True crime rate"
 )
 
-ax.set_xlabel("Validation observations (sorted by true y)")
+ax.set_xlabel("Validation observations (sorted by true crime rate)")
 ax.set_ylabel("y")
 ax.set_title(
     f"Quantile Regression vs. Conformal Prediction Intervals\n"
